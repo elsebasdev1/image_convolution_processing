@@ -1,0 +1,11 @@
+1. Crecimiento del tiempo por resolución y tamaño de máscara
+El tiempo de la CPU escala linealmente con la resolución: cuadruplicar el área de $2000\times2000$ (4MP) a $4000\times4000$ (16MP) incrementa el tiempo de 1475 ms a 5935 ms (factor de ~4x). En la GPU, el tamaño de la máscara dicta el cuello de botella de memoria; pasar de una máscara de $3\times3$ (9 lecturas por píxel) a una de $9\times9$ (81 lecturas) sobre la misma imagen de $4000\times4000$ disparó el tiempo del kernel de 2.84 ms a 89.15 ms. 
+
+2. Proporción del tiempo en transferencias
+En cargas de bajo impacto aritmético (Media de $3\times3$), las transferencias PCI-Express (H2D: 9.92 ms + D2H: 12.75 ms) consumen el 88.3% del tiempo total en GPU (25.65 ms), haciendo que la aceleración real caiga de 260x a 28x. Sin embargo, al aumentar el cómputo (Media de $9\times9$), las transferencias (39.44 ms + 39.13 ms) representan solo el 46.8% del tiempo total (167.80 ms), justificando el uso de la GPU para filtros pesados.  
+
+3. Configuración óptima de hilos y variabilidad
+La configuración de 256 hilos por bloque entregó el mejor rendimiento global (Kernel: 89.15 ms, Tiempo Total: 145.16 ms) comparada con 128 y 512 hilos. La variabilidad observada en el tiempo de transferencia D2H (16.63 ms con 256 hilos frente a ~39 ms en las otras) se atribuye a la sincronización del planificador del sistema operativo al bloquear los recursos de la GPU.
+
+4. Expectativas contradictorias y evidencia
+La expectativa inicial de que "más hilos equivalen a mayor velocidad" es desmentida por los resultados empíricos: lanzar 512 hilos resultó en un tiempo de kernel más lento (90.58 ms) que 256 hilos (89.14 ms). Esto se explica mediante la presión de registros en los SM de la arquitectura Turing; el límite máximo de memoria por bloque fuerza la serialización de los warps cuando 512 hilos intentan mantener simultáneamente en memoria rápida los índices y acumuladores para una máscara de $9\times9$.  
