@@ -92,19 +92,14 @@ Conversión a rango visual (solo para guardar la imagen, después de validar): s
 | CUDA runtime / driver | 13.4 / 13.4 |
 
 ### Equipo 2 — Lenovo (compañero)
-<!-- TODO: completar cuando el compañero pase sus especificaciones
 | Componente | Especificación |
 |---|---|
-| Modelo | |
-| CPU | |
-| RAM | |
-| GPU | |
-| Driver NVIDIA | |
-| SO | |
-| Compilador host | |
-| CUDA | |
--->
-_Especificaciones pendientes de agregar._
+| CPU | AMD Ryzen 5 4600H (6 núcleos / 12 hilos, 3.00 GHz base) — se usa 1 hilo |
+| RAM | 8,00 GB (7,37 GB utilizable) |
+| GPU | NVIDIA GeForce GTX 1650 Laptop (4096 MiB / 4 GB, CC 7.5 Turing) |
+| Driver NVIDIA | 617.42 (WDDM) |
+| SO | Microsoft Windows |
+| Compilador CUDA | nvcc release 12.8 (V12.8.61) · CUDA UMD 13.4 |
 
 ---
 
